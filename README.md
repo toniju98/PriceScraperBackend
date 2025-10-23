@@ -4,11 +4,14 @@ A TypeScript backend service that scrapes product information from idealo.de usi
 
 ## Features
 
-- **Web Scraping**: Automated scraping of product data from idealo.de
+- **Web Scraping**: Automated scraping of product data from idealo.de using Puppeteer
 - **Product Filtering**: Filter products by type, width, and depth dimensions
-- **REST API**: Express.js backend with CORS support
-- **TypeScript**: Fully typed codebase for better development experience
+- **REST API**: Express.js backend with CORS support and comprehensive error handling
+- **TypeScript**: Fully typed codebase with interfaces and proper type safety
 - **Cookie Handling**: Automatic cookie consent management
+- **Error Handling**: Robust error handling with timeouts and validation
+- **Performance**: Optimized selectors and efficient scraping process
+- **Health Monitoring**: Built-in health check endpoints
 
 ## Prerequisites
 
@@ -32,8 +35,16 @@ npm install
 
 ### Start the Server
 
+**Development mode:**
 ```bash
 npm start
+# or
+npm run dev
+```
+
+**Production mode:**
+```bash
+npm run build:start
 ```
 
 The server will start on `http://localhost:5000`
@@ -41,7 +52,10 @@ The server will start on `http://localhost:5000`
 ### API Endpoints
 
 #### GET `/`
-Returns a simple greeting message.
+Returns API status and information.
+
+#### GET `/health`
+Health check endpoint for monitoring.
 
 #### POST `/submit`
 Submit a product search request with filters.
@@ -57,13 +71,26 @@ Submit a product search request with filters.
 
 **Response:**
 ```json
-[
-  {
-    "title": "Product Name",
-    "price": 123.45,
-    "link": "https://idealo.de/product-link"
-  }
-]
+{
+  "success": true,
+  "count": 1,
+  "products": [
+    {
+      "title": "Product Name",
+      "price": 123.45,
+      "link": "https://idealo.de/product-link"
+    }
+  ]
+}
+```
+
+**Error Response:**
+```json
+{
+  "success": false,
+  "error": "Error message",
+  "timestamp": "2023-10-23T17:40:38.000Z"
+}
 ```
 
 ### Example Usage
@@ -108,8 +135,11 @@ The project uses TypeScript with the following configuration:
 ### Available Scripts
 
 ```bash
-npm test          # Run tests (currently not implemented)
 npm start         # Start the development server
+npm run dev       # Start the development server (alias)
+npm run build     # Compile TypeScript to JavaScript
+npm run build:start # Build and start production server
+npm test          # Run tests (currently not implemented)
 ```
 
 ## How It Works
